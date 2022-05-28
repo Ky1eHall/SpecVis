@@ -1,0 +1,12 @@
+Add error handling for bad files, return the python error
+Add option to use different kinds of audio backends (falltrhough to librosa)
+Code gen
+Different parameter settings eg. n_fft and so on.
+
+Visual overhaul!
+
+Explanations about spectrograms
+Links to other stuff, maybe make a second page.
+Save spectrograms
+Remove currenct spectrogram, or allow a comparison.
+Reload with new parameters (colour, n_fft)
