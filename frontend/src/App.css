@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  color: black;
+  background-color: rgba(247, 247, 247);
+  background-image: radial-gradient(rgba(0, 13, 255, 0.5) 1.3px, #f7f7f7 1.3px);
+  background-size: 26px 26px;
+  font-family: Helvetica, sans-serif
 }
 
 .App-logo {
@@ -14,14 +19,17 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  /* background-color: #282c34;
+  background-image: url( './cool-background.svg' );
+  background-size: cover;  */
+  min-height: 20vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 100px;
+  font-weight: bold;
+  color: black;
 }
 
 .App-link {
@@ -35,4 +43,55 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.SpecContainer {
+  font-size: 25px;
+  display: flex;
+  flex-direction: row;
+  justify-content:center;
+  flex-grow: 1;
+  margin-top: 100px;
+  background-color: lightblue;
+  width: 70%;
+  margin: auto;
+}
+
+.box1 {
+  margin-left: auto;
+  margin-right: auto;
+  min-height: max-content;
+  width: 45%;
+  border: white;
+  border-style: dotted;
+}
+
+.box2 {
+  margin: auto;
+  width: 45%;
+  border: black;
+  border-style: dotted;
+}
+.specImage {
+  max-width: 100%;
+  margin-top: 30px;
+}
+
+.backButton {
+  float: inline-start;
+
+}
+
+.formElement {
+  font-size: 15px;
+  margin: 10px;
+}
+
+.codeBlock {
+  max-width: 80%;
+  align-self: center;
+  margin-top: 30px;
+  border: red;
+  border-style: solid;
+  text-align: left;
 }

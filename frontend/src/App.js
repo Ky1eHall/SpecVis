@@ -42,9 +42,12 @@ function App() {
         </div>
       </header>
       <div>
+        <SpecContainer/>
+      </div>
+      
+      <div>
           Explanation about spectrograms, can put what they are, links etc.
       </div>
-      <SpecContainer></SpecContainer>
     </div>
   );
 }

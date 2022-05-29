@@ -32,8 +32,11 @@ class ApiHandler(Resource):
 
         
         audio_file = request.files["audio_file"]
-        n_fft_val = request.form["n_fft"]
+        n_fft_val = int(request.form["n_fft"])
+        win_val = int(request.form["win_val"])
+        n_fft_val = int(n_fft_val)
         print(n_fft_val)
+        print(win_val)
         file_name = str(random.randint(0,100000)) + ".wav"
         audio_file.save(file_name)
 
@@ -48,7 +51,7 @@ class ApiHandler(Resource):
         y, sr = librosa.load(path)
         os.remove(file_name)
 
-        mel_speccy = librosa.feature.melspectrogram(y=y, sr=sr)
+        mel_speccy = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft_val, win_length=win_val)
         M_db = librosa.power_to_db(mel_speccy, ref=np.max)
 
         p = plt.figure(num=None, figsize=(8, 6))
