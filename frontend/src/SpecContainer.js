@@ -3,11 +3,46 @@ import React, {useState} from 'react';
 // import Highlight from 'react-highlight';
 import { CodeBlock } from "react-code-blocks";
 
-var codeThing = 
-`print("hello world")
-if this:
-  do this
-  check n_fft - ${document.getElementById("n_fft").value}
+var codeThing = () =>
+`import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import librosa
+import librosa.display
+import numpy as np
+
+# Path is the os.Path object that leads to your image file
+y, sr = librosa.load(path)
+mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=${document.getElementById("n_fft").value}, win_length=${document.getElementById("win_val").value})
+M_db = librosa.power_to_db(mel_spec, ref=np.max)
+
+# To display and save using matplotlib
+p = plt.figure(num=None, figsize=(8, 6))
+p2 = plt.subplot(111)
+p3 = plt.axis('on')
+p4 = plt.subplots_adjust(left=0,right=1, bottom=0, top=1)
+p5 = librosa.display.specshow(M_db, sr=sr)
+p6 = plt.savefig("your_output_path.jpg", format='jpg') 
+p7 = plt.close()
+`
+
+var codeThing2 = () =>
+`import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
+mel_spec = MATPLOT!!!!(y=y, sr=sr, n_fft=${document.getElementById("n_fft").value}, win_length=${document.getElementById("win_val").value})
+M_db = librosa.power_to_db(mel_spec, ref=np.max)
+
+# To display and save using matplotlib
+p = plt.figure(num=None, figsize=(8, 6))
+p2 = plt.subplot(111)
+p3 = plt.axis('on')
+p4 = plt.subplots_adjust(left=0,right=1, bottom=0, top=1)
+p5 = librosa.display.specshow(M_db, sr=sr)
+p6 = plt.savefig("your_output_path.jpg", format='jpg') 
+p7 = plt.close()
 `
 
 function SpecContainer() {
@@ -29,6 +64,8 @@ function SpecContainer() {
         formData.append("audio_file", audioFiles.files[0]);
         formData.append("n_fft", document.getElementById("n_fft").value);
         formData.append("win_val", document.getElementById("win_val").value);
+        formData.append("library", document.getElementById("libraries").value);
+        formData.append("axes", document.getElementById("axes").checked)
         console.log(document.getElementById("n_fft").value)
         console.log(formData)
         axios.post('http://localhost:5000/flask/check', formData, {
@@ -53,6 +90,18 @@ function SpecContainer() {
       document.getElementById('audio').value = ''
     }
 
+    function setDisabledElements(value) {
+      console.log("the value from select")
+      console.log(value)
+      if (value === "matplotlib") {
+        document.getElementById("win_val").disabled = true
+      }
+      if (value === "librosa") {
+        document.getElementById("win_val").disabled = false  
+      }
+    }
+
+  
     return (
       <div className="SpecContainer">
         <div className='box1'>
@@ -62,39 +111,48 @@ function SpecContainer() {
             <div style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
               <button style={{alignSelf: 'flex-start'}} className='backButton' onClick={() => goBack()}>Restart</button>  
               <div className="codeBlock"> 
-              <CodeBlock
-                text={codeThing}
-                // `print("hello world")\n
-                //  if solved: \n     some extra lines`
-                // }
-                codeBlock={true}
-                language="python"
-                showLineNumbers={true}
-                wrapLines={true}
-              />
+                <CodeBlock
+                  text={ document.getElementById("libraries").value === "librosa" ? codeThing() : codeThing2() }
+                  codeBlock={true}
+                  language="python"
+                  showLineNumbers={true}
+                  wrapLines={true}
+                />
               </div>
             </div>
           }
         </div>
         <div className="box2">
-          <div>
-            <form>
+          <div className='formContainer'>
+            <form className="form">
               <div className='formElement'>
                 <label for="audio">N_fft parameter: </label>
                 <input type="number" id="n_fft" defaultValue={1024} name="audio"/>
               </div>
               <div className='formElement'>
                 <label for="win_val">Win length: </label>
-                <input type="number" id="win_val" defaultValue={1024} name="win_val"/>
+                <input type="number" id="win_val" defaultValue={1024} name="win_val" disabled={false}/>
               </div>
               <div className='formElement'>
-                
+                <label for="axes">Axes: </label>
+                <input type="checkbox" id="axes" defaultValue={false} name="axes" value="true"/>
+              </div>
+              <div className='formElement'>
+                <label for="libraries">Libraries:  </label>
+                <select name="libraries" id="libraries" onInput={() => setDisabledElements(document.getElementById("libraries").value)}>
+                    <option value="librosa">Librosa</option>
+                    <option value="matplotlib">Matplotlib</option>
+                </select>
+              </div>
+              <div className='formElement'>
+                <label>Upload your sound file</label>
+                <input type="file" id="audio" accept='audio/wav' onInput={() => setUploadedAudio(true)}></input>
               </div>
             </form>
           </div>
           <div>
-            <input type="file" id="audio" accept='audio/wav' onInput={() => setUploadedAudio(true)}></input>
-            {hasUploadedAudio && <button disabled={isSending} onClick={() => {getSpectrogram()}}>Send audio file</button>}
+           
+            {hasUploadedAudio && <button disabled={isSending} onClick={() => {getSpectrogram()}}>Make Spectrogram</button>}
             {isSending && <h2>Loading</h2>}
           </div>
             {spectrogram !== undefined && 
