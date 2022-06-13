@@ -3,6 +3,14 @@ import React, {useState} from 'react';
 // import Highlight from 'react-highlight';
 import { CodeBlock } from "react-code-blocks";
 import qmark from './qmark.svg';
+import {
+  Tooltip,
+  SimpleGrid,
+  Box,
+  Flex
+} from '@chakra-ui/react';
+import { QuestionOutlineIcon } from '@chakra-ui/icons'
+
 
 var codeThing = () =>
 `import matplotlib
@@ -104,9 +112,17 @@ function SpecContainer() {
 
   
     return (
-      <div className="SpecContainer">
-        <div className='box1'>
-  
+      <Flex
+      align={'center'}
+      justify={'center'}
+      p={8} flex={1}>
+      <SimpleGrid columns={2} spacing={10} >
+
+        {/* <div className='box1'> */}
+        <Box
+          rounded={'lg'}
+          boxShadow={'lg'}
+          p={8}>
           { spectrogram === undefined ? 
             <div>Placeholder for preamble. <br></br> Is replaced by codegen once spectrogram is made</div> :
             <div style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
@@ -122,17 +138,25 @@ function SpecContainer() {
               </div>
             </div>
           }
-        </div>
-        <div className="box2">
+        </Box>
+        {/* </div> */}
+        {/* <div className="box2"> */}
+        <Box
+          rounded={'lg'}
+          boxShadow={'lg'}
+          p={8}>
           <div className='formContainer'>
             <form className="form">
               <div className='formElement'>
-                <label for="audio">N_fft parameter
+                <label for="audio">N_fft parameter: </label>
                   {/* <i className='tooltip' src={qmark} width='25px'/>Test
                     <span>Tooltip text</span>: */}
-                  
-                </label>
-                <input type="number" id="n_fft" defaultValue={1024} name="audio"/>
+                  {/* <Tooltip hasArrow label='Info' bg='gray.300' color='black'>
+                      <QuestionOutlineIcon/>
+                  </Tooltip> */}
+                  <Tooltip hasArrow label='RThe value that does this thing' bg='gray.300' color='black'>
+                    <input type="number" id="n_fft" defaultValue={1024} name="audio"/>
+                </Tooltip>
               </div>
               <div className='formElement'>
                 <label for="win_val">Win length: </label>
@@ -163,8 +187,10 @@ function SpecContainer() {
             {spectrogram !== undefined && 
                 <img className='specImage' src={spectrogram} alt="test"/>
             }
-        </div>
-    </div>
+        {/* </div> */}
+        </Box>
+    </SimpleGrid>
+    </Flex>
   )
 }
 
