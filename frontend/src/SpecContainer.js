@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, {useState} from 'react';
 // import Highlight from 'react-highlight';
 import { CodeBlock } from "react-code-blocks";
+import qmark from './qmark.svg';
 
 var codeThing = () =>
 `import matplotlib
@@ -126,7 +127,11 @@ function SpecContainer() {
           <div className='formContainer'>
             <form className="form">
               <div className='formElement'>
-                <label for="audio">N_fft parameter: </label>
+                <label for="audio">N_fft parameter
+                  {/* <i className='tooltip' src={qmark} width='25px'/>Test
+                    <span>Tooltip text</span>: */}
+                  
+                </label>
                 <input type="number" id="n_fft" defaultValue={1024} name="audio"/>
               </div>
               <div className='formElement'>

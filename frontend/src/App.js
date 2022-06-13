@@ -20,6 +20,7 @@ function App() {
 
   if (isLoading) {
     return (
+      // <ThemeProvider>
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
@@ -31,10 +32,12 @@ function App() {
           </div>
         </header>
       </div>
+      // </ThemeProvider>
     )
   }
 
   return (
+    // <ThemeProvider>
     <div className="App">
       <header className="App-header">
         <div>
@@ -49,6 +52,7 @@ function App() {
           Explanation about spectrograms, can put what they are, links etc.
       </div>
     </div>
+    // </ThemeProvider>
   );
 }
 
