@@ -21,3 +21,6 @@ Immediate to do:
 - get the matplotlib generation of spectrograms going, differing color/proof it works in multiple ways
 
 Can use python -m pip install if pip not on PATH
+
+- Continue refactor using chakra-ui. Looking much nicer/cleaner, but need to refactor form to use the specific elements.
+- Can make some default sounds that could be used, basically don't send a file but use the default thats present on the server.

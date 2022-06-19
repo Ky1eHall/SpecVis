@@ -99,14 +99,19 @@ def handleLibrosaSpec(return_data, request):
 
 def handleMatplotlibSpec(return_data, request):
     # Read the wav file (mono)
-    audio_file = request.files["audio_file"]
+    
     n_fft_val = int(request.form["n_fft"])
     # win_val = int(request.form["win_val"])
     print("tried this")
     print(str(request.form['axes']))
 
-    file_name = str(random.randint(0,100000)) + ".wav"
-    audio_file.save(file_name)
+    if request.form["default_file"] == "true":
+        file_name = "./backend/api/clackLaptop.wav"
+    else:
+        audio_file = request.files["audio_file"]
+        file_name = str(random.randint(0,100000)) + ".wav"
+        audio_file.save(file_name)
+
 
     path = os.fspath(file_name)
     y, sr = librosa.load(path)
@@ -116,7 +121,9 @@ def handleMatplotlibSpec(return_data, request):
 
 
     #samplingFrequency, signalData = wav.read(path)
-    os.remove(file_name)
+    if request.form["default_file"] != "true":
+        os.remove(file_name)
+    
     # Plot the signal read from wav file
     # p = plt.subplot(211)
     # # p = plt.title('Spectrogram of a wav file with piano music')

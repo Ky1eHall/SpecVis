@@ -62,13 +62,18 @@ function SpecContainer() {
 
     // https://stackoverflow.com/questions/14551194/how-are-parameters-sent-in-an-http-post-request
     // Sending the extra stuff as part of the form data.
-    function getSpectrogram() {
+    function getSpectrogram(local) {
         // Will first use a specific audio file, but later will enable selecting a file, or specifying users own.
         setIsSending(true); // Renable the ability to send/options
 
         // Remove any existing spectrogram:
         setSpectrogram(undefined)
         var formData = new FormData();
+        if (local === true) {
+          formData.append("default_file", "true")
+        } else {
+          formData.append("default_file", "false")
+        }
         var audioFiles = document.querySelector('#audio')
         formData.append("audio_file", audioFiles.files[0]);
         formData.append("n_fft", document.getElementById("n_fft").value);
@@ -180,8 +185,10 @@ function SpecContainer() {
             </form>
           </div>
           <div>
-           
-            {hasUploadedAudio && <button disabled={isSending} onClick={() => {getSpectrogram()}}>Make Spectrogram</button>}
+
+            {hasUploadedAudio ? <button disabled={isSending} onClick={() => {getSpectrogram(false)}}>Make Spectrogram</button> : 
+              <button disabled={isSending} onClick={() => {getSpectrogram(true)}}>Try with default sound file</button>
+            }
             {isSending && <h2>Loading</h2>}
           </div>
             {spectrogram !== undefined && 
