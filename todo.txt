@@ -21,3 +21,6 @@ Immediate to do:
 - get the matplotlib generation of spectrograms going, differing color/proof it works in multiple ways
 
 Can use python -m pip install if pip not on PATH
+
+Maybe add a toolbar across top, or at least some motif??
+Fill out the values properly, research into spectrograms. Can plug paper or something lol.

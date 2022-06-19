@@ -3,51 +3,15 @@ import {
   ChakraProvider,
   Box,
   Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
+  Heading,
   theme,
 } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-// import { Logo } from './Logo';
-import logo from './logo.svg';
-import './App.css';
 import React, {useEffect, useState, useRef} from 'react';
 import axios from 'axios'
 import SpecContainer from './SpecContainer';
-import CallToActionWithAnnotation from './Header';
+import CallToActionWithAnnotation from './CTA';
 
-
-// function App() {
-//   return (
-//     <ChakraProvider theme={theme}>
-//       <Box textAlign="center" fontSize="xl">
-//         <Grid minH="100vh" p={3}>
-//           <ColorModeSwitcher justifySelf="flex-end" />
-//           <VStack spacing={8}>
-//             <Logo h="40vmin" pointerEvents="none" />
-//             <Text>
-//               Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-//             </Text>
-//             <Link
-//               color="teal.500"
-//               href="https://chakra-ui.com"
-//               fontSize="2xl"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//             >
-//               Learn Chakra
-//             </Link>
-//           </VStack>
-//         </Grid>
-//       </Box>
-//     </ChakraProvider>
-//   );
-// }
-
-function App() {
-  //const [resp, setResp] = useState();
+export default function App() {
   const [isLoading, setLoading] = useState(true);
   const myRef = useRef(null);
 
@@ -56,8 +20,7 @@ function App() {
   }     
 
 
-  useEffect(() => {axios.get('http://localhost:5000/check').then(response => {
-      // setResp(response.data)
+  useEffect(() => {axios.get('http://localhost:5000/check').then(() => {
       setLoading(false)
     }).catch(error => {
       console.log(error)
@@ -67,40 +30,35 @@ function App() {
   if (isLoading) {
     return (
       <ChakraProvider theme={theme}>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <div>
+      <Box>
+        <Heading justify={'center'} align={"center"}>
+          <Box>
             Spectrogram Visualiser
-            <h2>
+            <Text justify={'center'} align={"center"} p={100}>
               Loading....
-            </h2>
-          </div>
-        </header>
-      </div>
+            </Text>
+          </Box>
+        </Heading>
+      </Box>
       </ChakraProvider>
     )
   }
 
   return (
     <ChakraProvider theme={theme}>
-    <div className="App">
-      {/* <header className="App-header">
-        <div>
-          Spectrogram Visualiser
-        </div>
-      </header> */}
+    <Box>
       <CallToActionWithAnnotation ctaLink={executeScroll}/>
-      <div ref={myRef}>
+
+      <Box>
         <SpecContainer/>
-      </div>
+      </Box>
+      <div ref={myRef}></div>
       
-      <div>
+      <Box align={'center'}>
           Explanation about spectrograms, can put what they are, links etc.
-      </div>
-    </div>
+      </Box>
+    </Box>
     </ChakraProvider>
   );
 }
 
-export default App;

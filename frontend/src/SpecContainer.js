@@ -1,19 +1,15 @@
 import axios from 'axios'
 import React, {useState} from 'react';
-// import Highlight from 'react-highlight';
 import { CodeBlock } from "react-code-blocks";
-import qmark from './qmark.svg';
 import {
   Button,
+  Text,
   Tooltip,
   SimpleGrid,
   Box,
-  Flex,
   FormLabel,
   Stack,
-  HStack,
   FormControl,
-  Input,
   NumberInput,
   NumberIncrementStepper,
   NumberDecrementStepper,
@@ -21,8 +17,6 @@ import {
   NumberInputField,
   Select,
   Switch,
-  Wrap,
-  WrapItem
 } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 
@@ -145,10 +139,10 @@ function SpecContainer() {
           boxShadow={'lg'}
           p={8}>
           { spectrogram === undefined ? 
-            <div>Placeholder for preamble. <br></br> Is replaced by codegen once spectrogram is made</div> :
-            <div style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
-              <Button style={{alignSelf: 'flex-start'}} className='backButton' onClick={() => goBack()}>Restart</Button>  
-              <div className="codeBlock"> 
+            <Text>Placeholder for preamble. <br></br> Is replaced by codegen once spectrogram is made</Text> :
+            <Box style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
+              <Button style={{alignSelf: 'flex-start'}} className='backButton' onClick={() => goBack()}>Restart</Button> 
+              <Box p={5}> 
                 <CodeBlock
                   text={ document.getElementById("libraries").value === "librosa" ? codeThing() : codeThing2() }
                   codeBlock={true}
@@ -156,8 +150,8 @@ function SpecContainer() {
                   showLineNumbers={true}
                   wrapLines={true}
                 />
-              </div>
-            </div>
+              </Box>
+            </Box>
           }
         </Box>
         <Box
@@ -215,16 +209,16 @@ function SpecContainer() {
                   </FormControl>
                 </Box>
             </Stack>
-          <Box>
+          <Box justify={'center'} align={'center'} p={2}>
 
             {hasUploadedAudio ? <Button disabled={isSending} onClick={() => {getSpectrogram(false)}} colorScheme='blue'>Make Spectrogram</Button> :
-              <Button disabled={isSending} onClick={() => {getSpectrogram(true)}}>Try default file</Button>
+              <Button disabled={isSending} onClick={() => {getSpectrogram(true)}}>Try with default sound file</Button>
             }
-            {isSending && <h2>Loading</h2>}
+            {isSending && <Text paddingTop={5}>Creating your spectrogram now...</Text>}
           </Box>
           <Box align={'center'}>
-            {spectrogram !== undefined && <img className='specImage' src={spectrogram} alt="test"/>}
-            {caughtError && <Box paddingTop={10}> Opps, an error occurred, try again </Box>}
+            {spectrogram !== undefined && <Box p={2}><img className='specImage' src={spectrogram} alt="test"/></Box>}
+            {caughtError && <Box p={10}> Opps, an error occurred, try again </Box>}
           </Box>
         </Box>
     </SimpleGrid>
