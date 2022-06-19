@@ -4,10 +4,25 @@ import React, {useState} from 'react';
 import { CodeBlock } from "react-code-blocks";
 import qmark from './qmark.svg';
 import {
+  Button,
   Tooltip,
   SimpleGrid,
   Box,
-  Flex
+  Flex,
+  FormLabel,
+  Stack,
+  HStack,
+  FormControl,
+  Input,
+  NumberInput,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  NumberInputStepper,
+  NumberInputField,
+  Select,
+  Switch,
+  Wrap,
+  WrapItem
 } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from '@chakra-ui/icons'
 
@@ -59,23 +74,26 @@ function SpecContainer() {
     const [spectrogram, setSpectrogram] = useState();
     const [hasUploadedAudio, setUploadedAudio] = useState(false);
     const [isSending, setIsSending] = useState(false);
+    const [caughtError, setError] = useState(false)
 
     // https://stackoverflow.com/questions/14551194/how-are-parameters-sent-in-an-http-post-request
     // Sending the extra stuff as part of the form data.
     function getSpectrogram(local) {
-        // Will first use a specific audio file, but later will enable selecting a file, or specifying users own.
         setIsSending(true); // Renable the ability to send/options
+        setError(false); // If previous error caught, reset to remove text.
+        setSpectrogram(undefined)  // Remove any existing spectrogram
 
-        // Remove any existing spectrogram:
-        setSpectrogram(undefined)
         var formData = new FormData();
+        var audioFiles = undefined
         if (local === true) {
           formData.append("default_file", "true")
         } else {
           formData.append("default_file", "false")
+          audioFiles = document.querySelector('#audio')
+          formData.append("audio_file", audioFiles.files[0]);
         }
-        var audioFiles = document.querySelector('#audio')
-        formData.append("audio_file", audioFiles.files[0]);
+        //var audioFiles = document.querySelector('#audio')
+        
         formData.append("n_fft", document.getElementById("n_fft").value);
         formData.append("win_val", document.getElementById("win_val").value);
         formData.append("library", document.getElementById("libraries").value);
@@ -89,13 +107,13 @@ function SpecContainer() {
             responseType: 'blob',
           }).then(res => {
             var specUrl = URL.createObjectURL(res.data)
-            console.log(res)
-            console.log(specUrl)
-            console.log(res.data)
-            //return (<img src={specUrl} alt="testing" />)
             setSpectrogram(specUrl)
             setIsSending(false);
-          })
+          }).catch(function (error) {
+            console.log(error.toJSON());
+            setIsSending(false);
+            setError(true);
+          });
     }
 
     function goBack() {
@@ -117,13 +135,11 @@ function SpecContainer() {
 
   
     return (
-      <Flex
-      align={'center'}
-      justify={'center'}
+      <Stack
+      // align={'center'}
+      // justify={'center'}
       p={8} flex={1}>
-      <SimpleGrid columns={2} spacing={10} >
-
-        {/* <div className='box1'> */}
+      <SimpleGrid minChildWidth='200px'  spacing={8} >
         <Box
           rounded={'lg'}
           boxShadow={'lg'}
@@ -131,7 +147,7 @@ function SpecContainer() {
           { spectrogram === undefined ? 
             <div>Placeholder for preamble. <br></br> Is replaced by codegen once spectrogram is made</div> :
             <div style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
-              <button style={{alignSelf: 'flex-start'}} className='backButton' onClick={() => goBack()}>Restart</button>  
+              <Button style={{alignSelf: 'flex-start'}} className='backButton' onClick={() => goBack()}>Restart</Button>  
               <div className="codeBlock"> 
                 <CodeBlock
                   text={ document.getElementById("libraries").value === "librosa" ? codeThing() : codeThing2() }
@@ -144,81 +160,76 @@ function SpecContainer() {
             </div>
           }
         </Box>
-        {/* </div> */}
-        {/* <div className="box2"> */}
         <Box
           rounded={'lg'}
           boxShadow={'lg'}
           p={8}>
-          <div className='formContainer'>
-            <form className="form">
-              <div className='formElement'>
-                <label for="audio">N_fft parameter: </label>
-                  {/* <i className='tooltip' src={qmark} width='25px'/>Test
-                    <span>Tooltip text</span>: */}
-                  {/* <Tooltip hasArrow label='Info' bg='gray.300' color='black'>
-                      <QuestionOutlineIcon/>
-                  </Tooltip> */}
-                  <Tooltip hasArrow label='RThe value that does this thing' bg='gray.300' color='black'>
-                    <input type="number" id="n_fft" defaultValue={1024} name="audio"/>
-                </Tooltip>
-              </div>
-              <div className='formElement'>
-                <label for="win_val">Win length: </label>
-                <input type="number" id="win_val" defaultValue={1024} name="win_val" disabled={false}/>
-              </div>
-              <div className='formElement'>
-                <label for="axes">Axes: </label>
-                <input type="checkbox" id="axes" defaultValue={false} name="axes" value="true"/>
-              </div>
-              <div className='formElement'>
-                <label for="libraries">Libraries:  </label>
-                <select name="libraries" id="libraries" onInput={() => setDisabledElements(document.getElementById("libraries").value)}>
+          <Stack spacing={3} paddingBottom={5}>
+              <Box>
+                <FormControl id="n_fft_label">
+                  <FormLabel>N_fft parameter</FormLabel>
+                  <NumberInput defaultValue={1024} min={256} max={4096} id="n_fft">
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                  </NumberInput>
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl id="win_val_label">
+                  <FormLabel>Window Length: </FormLabel>
+                  <NumberInput defaultValue={1024} min={256} max={4096} id="win_val" disabled={false}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                  </NumberInput>
+                </FormControl>
+              </Box>
+               <Box>
+                <FormControl id="win_val_label">
+                  <FormLabel>Libraries: </FormLabel>
+                  <Select id="libraries" onInput={() => setDisabledElements(document.getElementById("libraries").value)}>
                     <option value="librosa">Librosa</option>
                     <option value="matplotlib">Matplotlib</option>
-                </select>
-              </div>
-              <div className='formElement'>
-                <label>Upload your sound file</label>
-                <input type="file" id="audio" accept='audio/wav' onInput={() => setUploadedAudio(true)}></input>
-              </div>
-            </form>
-          </div>
-          <div>
+                  </Select>
+                  </FormControl>
+                </Box>
+                <Box>
+                  <FormControl display='flex' alignItems='center'>
+                    <FormLabel htmlFor='axes_label' mb='0'>
+                      Axes on output
+                    </FormLabel>
+                    <Switch id='axes' />
+                  </FormControl>
+                </Box>
+                <Box>
+                <FormControl display='flex' alignItems='center'>
+                 <FormLabel htmlFor='upload_label' mb='0'>
+                   Upload your sound file
+                 </FormLabel>
+                  <input type="file" id="audio" accept='audio/wav' onInput={() => setUploadedAudio(true)}></input>
+                  </FormControl>
+                </Box>
+            </Stack>
+          <Box>
 
-            {hasUploadedAudio ? <button disabled={isSending} onClick={() => {getSpectrogram(false)}}>Make Spectrogram</button> : 
-              <button disabled={isSending} onClick={() => {getSpectrogram(true)}}>Try with default sound file</button>
+            {hasUploadedAudio ? <Button disabled={isSending} onClick={() => {getSpectrogram(false)}} colorScheme='blue'>Make Spectrogram</Button> :
+              <Button disabled={isSending} onClick={() => {getSpectrogram(true)}}>Try default file</Button>
             }
             {isSending && <h2>Loading</h2>}
-          </div>
-            {spectrogram !== undefined && 
-                <img className='specImage' src={spectrogram} alt="test"/>
-            }
-        {/* </div> */}
+          </Box>
+          <Box align={'center'}>
+            {spectrogram !== undefined && <img className='specImage' src={spectrogram} alt="test"/>}
+            {caughtError && <Box paddingTop={10}> Opps, an error occurred, try again </Box>}
+          </Box>
         </Box>
     </SimpleGrid>
-    </Flex>
+    </Stack>
   )
 }
 
 export default SpecContainer
-
-
-// }).then(response => {
-    //   console.log(response)
-    //   // Should double check its an img type.
-    //   axios.get('http://localhost:5000/flask/check/test_speccy.jpg', {responseType: 'blob'}).then(res => {
-    //     var specUrl = URL.createObjectURL(res.data)
-    //     console.log(specUrl)
-    //     console.log(res.data)
-    //     //return (<img src={specUrl} alt="testing" />)
-    //     setSpectrogram(specUrl)
-    //   })
-      
-
-  //   <Highlight language="python">
-  //   {"function foo() { " + 
-  //   "return " + document.getElementById("n_fft").value +
-  //   "return" + document.getElementById("win_val").value + 
-  //   "}"}
-  // </Highlight>
