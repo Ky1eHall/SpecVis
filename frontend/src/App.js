@@ -46,18 +46,35 @@ export default function App() {
 
   return (
     <ChakraProvider theme={theme}>
-    <Box>
-      <CallToActionWithAnnotation ctaLink={executeScroll}/>
+      <Box bg='#f2f2f2' minHeight={'100vh'}>
+        <Box>
+          {/* <CallToActionWithAnnotation ctaLink={executeScroll}/> */}
+          <Heading
+            paddingTop={8}
+            align={"center"}
+            fontWeight={600}
+            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+            lineHeight={'110%'}>
+                Spectrogram 
+            <Text as={'span'} color={'blue.400'}>
+              Visualiser
+            </Text>
+          </Heading>
+          <Heading 
+            p={2}
+            align={"center"}           
+            fontWeight={300}
+            fontSize={{ base: '2xl', sm: '3xl', md: '3xl' }}
+            lineHeight={'100%'}
+            paddingBottom={20}>
+              Rapidly prototype with modern Python libraries
+          </Heading>
 
-      <Box>
-        <SpecContainer/>
+          <Box>
+            <SpecContainer/>
+          </Box>
+        </Box>
       </Box>
-      <div ref={myRef}></div>
-      
-      <Box align={'center'}>
-          Explanation about spectrograms, can put what they are, links etc.
-      </Box>
-    </Box>
     </ChakraProvider>
   );
 }

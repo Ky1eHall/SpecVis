@@ -130,18 +130,29 @@ function SpecContainer() {
   
     return (
       <Stack
-      // align={'center'}
+      align={'center'}
       // justify={'center'}
-      p={8} flex={1}>
-      <SimpleGrid minChildWidth='200px'  spacing={8} >
+      p={8} 
+      flex={1}
+      >
+      <SimpleGrid minChildWidth='200px' spacing={20} justify='center' width='80%'>
         <Box
           rounded={'lg'}
-          boxShadow={'lg'}
+          boxShadow={'16px 16px 23px #a1a1a1,-16px -16px 23px #ffffff;'}
+          borderRadius='50px'
           p={8}>
           { spectrogram === undefined ? 
-            <Text>Placeholder for preamble. <br></br> Is replaced by codegen once spectrogram is made</Text> :
+            <Text>
+              Spectrograms are a visual representation of sound, commonly used in signal processing and machine learning
+              due to its compact representation and ability to be manipulated as an image. 
+              <br></br><br></br>
+              Learn about spectrograms by making your own. Rapidly prototype with modern Python libraries and the code provided to enhance into your next machine 
+              learning project.
+              <br></br><br></br>
+              Upload any .wav file to make a spectrogram, or use the default file to try different styles and generate the Python code to add to your projects
+            </Text> :
             <Box style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
-              <Button style={{alignSelf: 'flex-start'}} className='backButton' onClick={() => goBack()}>Restart</Button> 
+              <Button style={{alignSelf: 'flex-start'}} colorScheme="blackAlpha" className='backButton' onClick={() => goBack()}>Restart</Button> 
               <Box p={5}> 
                 <CodeBlock
                   text={ document.getElementById("libraries").value === "librosa" ? codeThing() : codeThing2() }
@@ -156,9 +167,10 @@ function SpecContainer() {
         </Box>
         <Box
           rounded={'lg'}
-          boxShadow={'lg'}
+          boxShadow={'16px 16px 23px #a1a1a1,-16px -16px 23px #ffffff;'}
+          borderRadius='50px'
           p={8}>
-          <Stack spacing={3} paddingBottom={5}>
+         <Stack spacing={3} paddingBottom={5} >
               <Box>
                 <FormControl id="n_fft_label">
                   <FormLabel>N_fft parameter</FormLabel>
@@ -185,7 +197,7 @@ function SpecContainer() {
               </Box>
                <Box>
                 <FormControl id="win_val_label">
-                  <FormLabel>Libraries: </FormLabel>
+                  <FormLabel>Library: </FormLabel>
                   <Select id="libraries" onInput={() => setDisabledElements(document.getElementById("libraries").value)}>
                     <option value="librosa">Librosa</option>
                     <option value="matplotlib">Matplotlib</option>
@@ -212,7 +224,7 @@ function SpecContainer() {
           <Box justify={'center'} align={'center'} p={2}>
 
             {hasUploadedAudio ? <Button disabled={isSending} onClick={() => {getSpectrogram(false)}} colorScheme='blue'>Make Spectrogram</Button> :
-              <Button disabled={isSending} onClick={() => {getSpectrogram(true)}}>Try with default sound file</Button>
+              <Button disabled={isSending} colorScheme="blackAlpha" onClick={() => {getSpectrogram(true)}}>Try with default sound file</Button>
             }
             {isSending && <Text paddingTop={5}>Creating your spectrogram now...</Text>}
           </Box>
