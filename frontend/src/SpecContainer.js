@@ -17,8 +17,9 @@ import {
   NumberInputField,
   Select,
   Switch,
+  Link,
 } from '@chakra-ui/react';
-import { QuestionOutlineIcon } from '@chakra-ui/icons'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 
 var codeThing = () =>
@@ -50,15 +51,15 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 
-mel_spec = MATPLOT!!!!(y=y, sr=sr, n_fft=${document.getElementById("n_fft").value}, win_length=${document.getElementById("win_val").value})
-M_db = librosa.power_to_db(mel_spec, ref=np.max)
+# Using librosa to load in, but there are other libraries such as wave
+y, sr = librosa.load(path)
 
 # To display and save using matplotlib
 p = plt.figure(num=None, figsize=(8, 6))
 p2 = plt.subplot(111)
 p3 = plt.axis('on')
 p4 = plt.subplots_adjust(left=0,right=1, bottom=0, top=1)
-p5 = librosa.display.specshow(M_db, sr=sr)
+p5 = plt.specgram(y,Fs=sr,NFFT=n_fft_val)
 p6 = plt.savefig("your_output_path.jpg", format='jpg') 
 p7 = plt.close()
 `
@@ -144,12 +145,18 @@ function SpecContainer() {
           { spectrogram === undefined ? 
             <Text>
               Spectrograms are a visual representation of sound, commonly used in signal processing and machine learning
-              due to its compact representation and ability to be manipulated as an image. 
+              due to their ability to capture frequency, time and amplitude in a compact way. They're used in Speech recognition and synthesis, analysing the calls of animals, and for making certain kinds of music.
               <br></br><br></br>
-              Learn about spectrograms by making your own. Rapidly prototype with modern Python libraries and the code provided to enhance into your next machine 
-              learning project.
+              A spectrogram can be represented as a matrix, where each row is a frequency bin, and the columns represent a <Tooltip label='A short slice of a time series (in this case, the audio file), used for splitting the signal up for analysis'><Text as='cite'>frame. </Text></Tooltip>
+              This can be plotted, and the intensity of the signal at time value and frequency can be shown by the color on the spectrogram.
+              <br></br>
+              A window refers to a a vector or function that weights samples within a frame, and the frame length is the umber of samples within a frame when creating the spectrogram.
+              The number of samples is determined by the sampling rate - which is fixed to 22050Hz.
+             
               <br></br><br></br>
-              Upload any .wav file to make a spectrogram, or use the default file to try different styles and generate the Python code to add to your projects
+              See <Link href='https://librosa.org/doc/0.7.2/glossary.html' isExternal>the Librosa Glossary <ExternalLinkIcon mx='2px' /></Link> for more context on spectrograms
+              <br></br><br></br>
+              <Text fontWeight={'700'}>Upload any .wav file to make a spectrogram, or use the default file to try different styles and generate the Python code to add to your projects</Text>
             </Text> :
             <Box style={{display:'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
               <Button style={{alignSelf: 'flex-start'}} colorScheme="blackAlpha" className='backButton' onClick={() => goBack()}>Restart</Button> 
@@ -172,6 +179,7 @@ function SpecContainer() {
           p={8}>
          <Stack spacing={3} paddingBottom={5} >
               <Box>
+                <Tooltip label="The length of the Fast Fourier Transform window (including zero padding). This can apply zero padding if its greater than the window length, which acts to smooth over the frequency dimension">
                 <FormControl id="n_fft_label">
                   <FormLabel>N_fft parameter</FormLabel>
                   <NumberInput defaultValue={1024} min={256} max={4096} id="n_fft">
@@ -182,8 +190,10 @@ function SpecContainer() {
                   </NumberInputStepper>
                   </NumberInput>
                 </FormControl>
+                </Tooltip>
               </Box>
               <Box>
+              <Tooltip label="The window used in the FFT will be this length and zero padded to real n_fft. This can't be smaller than n_fft.">
                 <FormControl id="win_val_label">
                   <FormLabel>Window Length: </FormLabel>
                   <NumberInput defaultValue={1024} min={256} max={4096} id="win_val" disabled={false}>
@@ -194,15 +204,18 @@ function SpecContainer() {
                   </NumberInputStepper>
                   </NumberInput>
                 </FormControl>
+                </Tooltip>
               </Box>
                <Box>
-                <FormControl id="win_val_label">
+               <Tooltip label="The library used to generate the spectrogram. They have different parameters and default color configurations - your ML project may require the usage of a particular library. The code generated will differ.">
+                <FormControl id="library_label">
                   <FormLabel>Library: </FormLabel>
                   <Select id="libraries" onInput={() => setDisabledElements(document.getElementById("libraries").value)}>
                     <option value="librosa">Librosa</option>
                     <option value="matplotlib">Matplotlib</option>
                   </Select>
                   </FormControl>
+                  </Tooltip>
                 </Box>
                 <Box>
                   <FormControl display='flex' alignItems='center'>

@@ -1,3 +1,4 @@
+from cProfile import label
 import matplotlib
 matplotlib.use('Agg')
 from flask_restful import Api, Resource, reqparse
@@ -60,7 +61,7 @@ def handleLibrosaSpec(return_data, request):
 
     y, sr = retreiveSpectrogramData(request)
 
-    mel_speccy = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft_val, win_length=win_val)
+    mel_speccy = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=n_fft_val, hop_length=512, win_length=win_val)
     M_db = librosa.power_to_db(mel_speccy, ref=np.max)
 
     # p = plt.figure(num=None, figsize=(8, 6))
@@ -69,8 +70,8 @@ def handleLibrosaSpec(return_data, request):
         p4 = plt.subplots_adjust(left=0,right=1, bottom=0, top=1)
         p5 = librosa.display.specshow(M_db, sr=sr)
     else:
-        print("got here2")
         p5 = librosa.display.specshow(M_db, sr=sr, y_axis='mel', x_axis='time',)
+        p6 = plt.colorbar(label="dB")
     
     # Saving locally, need to remove this file after the return as well
     temp_file_prefix = random.randint(0,1000000)
@@ -99,23 +100,28 @@ def handleMatplotlibSpec(return_data, request):
 
     # Plot the signal read from wav file
     # p = plt.subplot(211)
-    # # p = plt.title('Spectrogram of a wav file with piano music')
     # p =plt.plot(y)
     p = plt.subplot(111)
-    p =plt.xlabel('Sample')
-    p =plt.ylabel('Amplitude')
+
+    
     #  p =plt.subplot(212)
     #p = plt.figure(num=None, figsize=(8, 6))
     
-    if (str(request.form['axes'])) == "false":
-        print("got here")
-        p = plt.axis('off')
+    
     # p = plt.subplots_adjust(left=0,right=1,bottom=0,top=1)
     p = plt.specgram(y,Fs=sr,NFFT=n_fft_val)
     # p =plt.xlabel('Time')
     # p =plt.ylabel('Frequency')
 
     # p = plt.axes([0., 0., 1., 1.])
+    if (str(request.form['axes'])) == "false":
+        print("checking got here")
+        p = plt.axis('off')
+    else:
+        p = plt.title('Spectrogram using matplotlib (not mel-spectrogram)')
+        p =plt.xlabel('Time')
+        p =plt.ylabel('Frequency')
+        p = plt.colorbar(label="dB")
 
     # plt.axis('off')
     p = plt.show()

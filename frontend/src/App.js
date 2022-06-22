@@ -4,12 +4,13 @@ import {
   Box,
   Text,
   Heading,
+  Link,
   theme,
 } from '@chakra-ui/react';
 import React, {useEffect, useState, useRef} from 'react';
 import axios from 'axios'
 import SpecContainer from './SpecContainer';
-import CallToActionWithAnnotation from './CTA';
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 export default function App() {
   const [isLoading, setLoading] = useState(true);
@@ -72,6 +73,10 @@ export default function App() {
 
           <Box>
             <SpecContainer/>
+          </Box>
+
+          <Box position={"fixed"} p={2} bottom='5' right='5' bg='blackAlpha.800' textColor={'white'} rounded={'lg'}>
+            <Link href='https://github.com/Senste/SpecVis'>Github repo <ExternalLinkIcon></ExternalLinkIcon></Link>
           </Box>
         </Box>
       </Box>
