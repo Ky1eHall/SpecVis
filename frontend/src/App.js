@@ -6,21 +6,22 @@ import {
   Link,
   theme,
 } from '@chakra-ui/react';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios'
 import SpecContainer from './SpecContainer';
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 export default function App() {
   const [isLoading, setLoading] = useState(true);
-  const myRef = useRef(null);
 
- function executeScroll() {
-    myRef.current.scrollIntoView();
-  }     
+  // var host = '0.0.0.0';
+  // if (process.env.PORT === undefined) {
+  //   console.log("got here")
+  //   host = "http://localhost"
+  // }
+  //const port = process.env.PORT || 5000;
 
-
-  useEffect(() => {axios.get('http://localhost:5000/check').then(() => {
+  useEffect(() => {axios.get('/check').then(() => {
       setLoading(false)
     }).catch(error => {
       console.log(error)

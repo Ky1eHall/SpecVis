@@ -32,5 +32,6 @@ RUN pip install -r ./requirements.txt
 
 ENV FLASK_ENV=production
 
-EXPOSE 3000
-CMD ["gunicorn", "-b", ":3000", "app:app"]
+# Will not be used in heroku, and will need references to be 0.0.0.0 not just localhost.
+# https://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
+CMD gunicorn -b 0.0.0.0:$PORT app:app

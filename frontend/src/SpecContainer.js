@@ -87,15 +87,18 @@ function SpecContainer() {
           audioFiles = document.querySelector('#audio')
           formData.append("audio_file", audioFiles.files[0]);
         }
-        //var audioFiles = document.querySelector('#audio')
         
         formData.append("n_fft", document.getElementById("n_fft").value);
         formData.append("win_val", document.getElementById("win_val").value);
         formData.append("library", document.getElementById("libraries").value);
         formData.append("axes", document.getElementById("axes").checked)
-        console.log(document.getElementById("n_fft").value)
-        console.log(formData)
-        axios.post('http://localhost:3000/flask/check', formData, {
+        // const port = process.env.PORT || 5000;
+        // var host = '0.0.0.0';
+        // if (process.env.PORT === undefined) {
+        //   host = "http://localhost"
+        // }
+        // host+':'+port+
+        axios.post('/flask/check', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }, 
