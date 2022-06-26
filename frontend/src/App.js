@@ -1,4 +1,3 @@
-//import React from 'react';
 import {
   ChakraProvider,
   Box,
@@ -49,9 +48,8 @@ export default function App() {
     <ChakraProvider theme={theme}>
       <Box bg='#f2f2f2' minHeight={'100vh'}>
         <Box>
-          {/* <CallToActionWithAnnotation ctaLink={executeScroll}/> */}
           <Heading
-            paddingTop={8}
+            paddingTop={10  }
             align={"center"}
             fontWeight={600}
             fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}

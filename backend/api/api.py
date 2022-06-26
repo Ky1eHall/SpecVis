@@ -1,10 +1,8 @@
 from cProfile import label
 import matplotlib
 matplotlib.use('Agg')
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Resource, reqparse
 from flask import request, send_file
-import scipy.io.wavfile as wav
-import wave
 import matplotlib.pyplot as plt
 import random
 import librosa
@@ -92,15 +90,11 @@ def handleLibrosaSpec(return_data, request):
 
 
 def handleMatplotlibSpec(return_data, request):
-    # Read the wav file (mono)
-    
     n_fft_val = int(request.form["n_fft"])
 
     y, sr = retreiveSpectrogramData(request)
 
     # Plot the signal read from wav file
-    # p = plt.subplot(211)
-    # p =plt.plot(y)
     p = plt.subplot(111)
 
     
@@ -110,9 +104,6 @@ def handleMatplotlibSpec(return_data, request):
     
     # p = plt.subplots_adjust(left=0,right=1,bottom=0,top=1)
     p = plt.specgram(y,Fs=sr,NFFT=n_fft_val)
-    # p =plt.xlabel('Time')
-    # p =plt.ylabel('Frequency')
-
     # p = plt.axes([0., 0., 1., 1.])
     if (str(request.form['axes'])) == "false":
         print("checking got here")
@@ -123,7 +114,6 @@ def handleMatplotlibSpec(return_data, request):
         p =plt.ylabel('Frequency')
         p = plt.colorbar(label="dB")
 
-    # plt.axis('off')
     p = plt.show()
     
     temp_file_prefix = random.randint(0,1000000)

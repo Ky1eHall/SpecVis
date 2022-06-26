@@ -12,7 +12,7 @@ from backend.api.api import ApiHandler
 
 from flask_cors import CORS # When experimenting locally, prevent CORS errors.
 
-app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+app = Flask(__name__, static_url_path='/', static_folder='frontend/build')
 CORS(app) # When experimenting locally - comment out on deployment
 api = Api(app)
 

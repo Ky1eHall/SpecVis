@@ -132,7 +132,6 @@ function SpecContainer() {
     return (
       <Stack
       align={'center'}
-      // justify={'center'}
       p={8} 
       flex={1}
       >
