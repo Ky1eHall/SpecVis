@@ -95,7 +95,7 @@ function SpecContainer() {
         formData.append("axes", document.getElementById("axes").checked)
         console.log(document.getElementById("n_fft").value)
         console.log(formData)
-        axios.post('http://localhost:5000/flask/check', formData, {
+        axios.post('http://localhost:3000/flask/check', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }, 
